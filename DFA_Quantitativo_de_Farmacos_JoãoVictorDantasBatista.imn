@@ -10,8 +10,8 @@ node n1 {
 	!
     }
     canvas c1
-    iconcoords {348.0 133.0}
-    labelcoords {353.0 108.0}
+    iconcoords {350.0 133.0}
+    labelcoords {355.0 108.0}
     interface-peer {eth0 n2}
     custom-config {
 	custom-config-id service:UserDefined
@@ -28,19 +28,25 @@ node n1 {
 	config {
 	from socket import *
 	
+	f = open("Estoque.txt","w")
+	f.write("Iboprofeno = 10 \n")
+	f.write("Tilenol = 2 \n")
+	f.write("Milanta = 4 \n")
+	f.close()
+	
 	portaServidor = 5000
 	
 	socketServidor = socket (AF_INET, SOCK_STREAM)
 	
 	socketServidor.bind (('200.17.121.13', portaServidor))
 	
-	socketServidor.listen (1)
+	socketServidor.listen (5)
 	FORMAT = "utf-8"
 	# Python 2
-	# print "O servidor esta pronto para receber"
+	#print "O servidor esta pronto para receber"
 	
 	# Python 3
-	print ("O servidor esta pronto para receber")
+	#print ("O servidor esta pronto para receber")
 	
 	while 1 :
 	
@@ -120,6 +126,8 @@ node n3 {
 	custom-config-id service:UserDefined:O_Cliente.py
 	custom-command O_Cliente.py
 	config {
+	
+	
 	from socket import *
 	
 	nomeServidor = '200.17.121.13'
@@ -131,10 +139,10 @@ node n3 {
 	socketCliente.connect ((nomeServidor, portaServidor))
 	
 	# Python 2
-	frase = raw_input ('Informe uma frase em letras minusculas: ')
+	frase = raw_input ('Escolha entre os comandos pull e push: ')
 	
 	# Python 3
-	#frase = input ('Informe uma frase em letras minusculas: ')
+	#frase = input ('Escolha entre os comandos pull e push: ')
 	
 	socketCliente.send (frase.encode())
 	
@@ -160,6 +168,8 @@ node n3 {
 		socketCliente.close ()
 	else:	
 		socketCliente.close ()
+	
+	
 	}
     }
     services {DefaultRoute UserDefined}
@@ -205,10 +215,10 @@ node n4 {
 	socketCliente.connect ((nomeServidor, portaServidor))
 	
 	# Python 2
-	frase = raw_input ('Informe uma frase em letras minusculas: ')
+	frase = raw_input ('Escolha entre os comandos pull e push: ')
 	
 	# Python 3
-	#frase = input ('Informe uma frase em letras minusculas: ')
+	#frase = input ('Escolha entre os comandos pull e push: ')
 	
 	socketCliente.send (frase.encode())
 	
