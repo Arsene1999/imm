@@ -110,8 +110,8 @@ node n3 {
 	!
     }
     canvas c1
-    iconcoords {604.0 123.0}
-    labelcoords {605.0 96.0}
+    iconcoords {601.0 124.0}
+    labelcoords {602.0 97.0}
     interface-peer {eth0 n5}
     custom-config {
 	custom-config-id service:UserDefined
@@ -127,8 +127,8 @@ node n3 {
 	custom-command O_Cliente.py
 	config {
 	
-	
 	from socket import *
+	import os.path
 	
 	nomeServidor = '200.17.121.13'
 	
@@ -139,36 +139,44 @@ node n3 {
 	socketCliente.connect ((nomeServidor, portaServidor))
 	
 	# Python 2
-	frase = raw_input ('Escolha entre os comandos pull e push: ')
+	frase = raw_input ('Escolha entre os comandos pull, push e list: ')
 	
 	# Python 3
 	#frase = input ('Escolha entre os comandos pull e push: ')
 	
-	socketCliente.send (frase.encode())
-	
-	
 	if(frase == "pull"):
+		socketCliente.send (frase.encode())
 		filename = socketCliente.recv(1024).decode("utf-8")
-		print("NOME")
-		print(filename)
+		#print("NOME")
+		#print(filename)
 		socketCliente.send("OK".encode())
 		data = socketCliente.recv(1024).decode("utf-8")
-		print("DATA")
+		print("Remedios presentes no armazen")
 		print(data)
 		file = open(filename, 'w')
 		file.write(data)
 		socketCliente.close ()
 	
 	elif(frase == "push"):
-		file = open("Estoque.txt","r")
-		data = file.read()
-		socketCliente.send(data.encode("utf-8"))
-		recebido = socketCliente.recv(1024).decode("utf-8")
-		print(recebido)
+		
+		if os.path.isfile("Estoque.txt"):
+			socketCliente.send (frase.encode())
+			file = open("Estoque.txt","r")
+			data = file.read()
+			socketCliente.send(data.encode("utf-8"))
+			recebido = socketCliente.recv(1024).decode("utf-8")
+			print(recebido)
+		else:
+			print("[ERRO]: Primeiro e preciso rodar o comando pull")
 		socketCliente.close ()
-	else:	
-		socketCliente.close ()
+	elif(frase == "list"):
+		print("Como interagir com o Estoque")
+		print("Use o comando 'pull' para receber o arquivo de estoque")
+		print("Use o comando 'push' para enviar suas alteracoes do estoque")	
 	
+	else:	
+		print("[ERRO]: Comando invalido")
+		socketCliente.close ()
 	
 	}
     }
@@ -187,8 +195,8 @@ node n4 {
 	!
     }
     canvas c1
-    iconcoords {815.0 124.0}
-    labelcoords {817.0 96.0}
+    iconcoords {815.0 127.0}
+    labelcoords {817.0 99.0}
     interface-peer {eth0 n5}
     custom-config {
 	custom-config-id service:UserDefined
@@ -205,6 +213,7 @@ node n4 {
 	config {
 	
 	from socket import *
+	import os.path
 	
 	nomeServidor = '200.17.121.13'
 	
@@ -215,39 +224,48 @@ node n4 {
 	socketCliente.connect ((nomeServidor, portaServidor))
 	
 	# Python 2
-	frase = raw_input ('Escolha entre os comandos pull e push: ')
+	frase = raw_input ('Escolha entre os comandos pull, push e list: ')
 	
 	# Python 3
 	#frase = input ('Escolha entre os comandos pull e push: ')
 	
-	socketCliente.send (frase.encode())
-	
-	
 	if(frase == "pull"):
+		socketCliente.send (frase.encode())
 		filename = socketCliente.recv(1024).decode("utf-8")
-		print("NOME")
-		print(filename)
+		#print("NOME")
+		#print(filename)
 		socketCliente.send("OK".encode())
 		data = socketCliente.recv(1024).decode("utf-8")
-		print("DATA")
+		print("Remedios presentes no armazen")
 		print(data)
 		file = open(filename, 'w')
 		file.write(data)
 		socketCliente.close ()
 	
 	elif(frase == "push"):
-		file = open("Estoque.txt","r")
-		data = file.read()
-		socketCliente.send(data.encode("utf-8"))
-		recebido = socketCliente.recv(1024).decode("utf-8")
-		print(recebido)
+		
+		if os.path.isfile("Estoque.txt"):
+			socketCliente.send (frase.encode())
+			file = open("Estoque.txt","r")
+			data = file.read()
+			socketCliente.send(data.encode("utf-8"))
+			recebido = socketCliente.recv(1024).decode("utf-8")
+			print(recebido)
+		else:
+			print("[ERRO]: Primeiro e preciso rodar o comando pull")
 		socketCliente.close ()
+	elif(frase == "list"):
+		print("Como interagir com o Estoque")
+		print("Use o comando 'pull' para receber o arquivo de estoque")
+		print("Use o comando 'push' para enviar suas alteracoes do estoque")	
+	
 	else:	
+		print("[ERRO]: Comando invalido")
 		socketCliente.close ()
 	
 	}
     }
-    services {DefaultRoute UserDefined}
+    services {OSPFv3MDR DefaultRoute UserDefined}
 }
 
 node n5 {
